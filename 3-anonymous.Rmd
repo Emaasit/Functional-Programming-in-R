@@ -1,0 +1,17 @@
+---
+title: "Anonymous Functions in R"
+author: "Daniel Emaasit"
+date: "February 27, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+## Anonymous Functions
+If you don't give a function a nmae, you get an anonymous function
+```{r anonymous_func}
+lapply(mtcars, function(x) length(unique(x)))
+Filter(function(x) !is.numeric(x), mtcars)
+```

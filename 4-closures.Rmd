@@ -1,0 +1,12 @@
+---
+title: "Closures in R"
+author: "Daniel Emaasit"
+date: "February 27, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+## Closures
+Are functions written by functions
