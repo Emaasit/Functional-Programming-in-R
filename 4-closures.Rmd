@@ -9,4 +9,4 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 ## Closures
-Are functions written by functions
+Are functions returned by another function. (The oppposite is called Functionals)

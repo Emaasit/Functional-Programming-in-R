@@ -118,6 +118,104 @@ $(document).ready(function () {
 
 <div id="functionals" class="section level2">
 <h2>Functionals</h2>
+<p>Functions that take a function as input and returns a vector as output. Examples:</p>
+<ul>
+<li>lapply</li>
+<li>sapply + vapply (vector output)</li>
+<li>mapply + Map (multiple inputs)</li>
+<li>apply</li>
+<li>tapply</li>
+</ul>
+<p>These functionals are already implemented in base R.</p>
+<div id="uses-of-functionals" class="section level4">
+<h4>Uses of Functionals</h4>
+<ul>
+<li>Commonly used as an alternative to <strong>For Loops</strong>.</li>
+<li>For encapsulating common data manipulation tasks like split-apply-combine</li>
+</ul>
+</div>
+<div id="advantages-using-functionals" class="section level4">
+<h4>Advantages using Functionals</h4>
+<ul>
+<li>Reduce bugs</li>
+<li>Functionals implemented in base R are efficient &amp; fast</li>
+</ul>
+</div>
+<div id="lapply" class="section level3">
+<h3>lapply()</h3>
+<p><code>lapply()</code> takes a function, applies it to each element in a list, &amp; returns a list.</p>
+<pre class="r"><code>input_list &lt;- as.list(mtcars)
+output_list &lt;- lapply(input_list, length)
+unlist(output_list)</code></pre>
+<pre><code>##  mpg  cyl disp   hp drat   wt qsec   vs   am gear carb 
+##   32   32   32   32   32   32   32   32   32   32   32</code></pre>
+<pre class="r"><code>mtcars[] &lt;- lapply(mtcars, function(x) x / mean(x))</code></pre>
+<div id="looping-pattern-1-over-elements" class="section level4">
+<h4>Looping Pattern 1: Over elements</h4>
+<p>Looping over the elements in a list</p>
+<pre class="r"><code>lapply(xs, function(x) {})</code></pre>
+</div>
+<div id="looping-pattern-2-over-numeric-indices" class="section level4">
+<h4>Looping Pattern 2: Over numeric indices</h4>
+<p>Looping over the numeric indices in a list</p>
+<pre class="r"><code>lapply(seq_along(xs), function(x) {})</code></pre>
+</div>
+<div id="looping-pattern-3-over-the-names" class="section level4">
+<h4>Looping Pattern 3: Over the names</h4>
+<p>Looping over the names in a list</p>
+<pre class="r"><code>lapply(names(xs), function(nm) {})</code></pre>
+</div>
+</div>
+<div id="sapply-vapply" class="section level3">
+<h3>sapply &amp; vapply</h3>
+<p>Functionals that take a function, apply it to every element in a list, and return an atomic vector.</p>
+<ul>
+<li><code>sapply()</code> guesses while <code>vapply()</code> takes an additional argument for the output type</li>
+<li><code>vapply()</code> is better suited for use inside functions.</li>
+</ul>
+<pre class="r"><code>df &lt;- data.frame(x = 1:10, y = Sys.time() + 1:10)
+sapply(df, class)</code></pre>
+<pre><code>## $x
+## [1] &quot;integer&quot;
+## 
+## $y
+## [1] &quot;POSIXct&quot; &quot;POSIXt&quot;</code></pre>
+<pre class="r"><code># vapply(df, class, character(2))</code></pre>
+</div>
+<div id="mapply-map" class="section level3">
+<h3>mapply &amp; Map</h3>
+<p>Used when you have two or more lists (or data frames) that you need to process in parallel.</p>
+<pre class="r"><code># Generate some sample data
+xs &lt;- replicate(n = 5, expr = runif(10), simplify = FALSE)
+ws &lt;- replicate(n = 5, expr = rpois(10, 5) + 1, simplify = FALSE)
+
+Map(function(xs, ws) {weighted.mean(xs, ws)}, xs, ws)</code></pre>
+<pre><code>## [[1]]
+## [1] 0.4243431
+## 
+## [[2]]
+## [1] 0.4272198
+## 
+## [[3]]
+## [1] 0.6071803
+## 
+## [[4]]
+## [1] 0.615409
+## 
+## [[5]]
+## [1] 0.5354104</code></pre>
+<div id="parallelisation-mclapply-mcmap" class="section level4">
+<h4>Parallelisation (mclapply + mcMap)</h4>
+<p>Since we can compute each element in any order, it’s easy to dispatch tasks to different cores, and compute them in parallel using the <strong>parallel</strong> package.</p>
+<pre class="r"><code>library(parallel)
+system.time(mclapply(1:1000, sqrt, mc.cores = 4))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.003   0.004   0.008</code></pre>
+<pre class="r"><code>system.time(lapply(1:1000, sqrt))</code></pre>
+<pre><code>##    user  system elapsed 
+##   0.001   0.000   0.001</code></pre>
+</div>
+</div>
 </div>
 
 

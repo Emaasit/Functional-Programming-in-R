@@ -10,4 +10,87 @@ knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
 ```
 
 ## Functionals
+Functions that take a function as input and returns a vector as output. Examples:
+
+* lapply
+* sapply + vapply (vector output)
+* mapply + Map (multiple inputs)
+* apply
+* tapply
+
+These functionals are already implemented in base R.
+
+#### Uses of Functionals
+
+* Commonly used as an alternative to **For Loops**.
+* For encapsulating common data manipulation tasks like split-apply-combine
+
+#### Advantages using Functionals
+
+* Reduce bugs
+* Functionals implemented in base R are efficient & fast
+
+### lapply()
+`lapply()` takes a function, applies it to each element in a list, & returns a list.
+```{r my_first_functional}
+input_list <- as.list(mtcars)
+output_list <- lapply(input_list, length)
+unlist(output_list)
+
+mtcars[] <- lapply(mtcars, function(x) x / mean(x))
+```
+
+#### Looping Pattern 1: Over elements
+Looping over the elements in a list
+```{r loop_elements, eval = FALSE}
+lapply(xs, function(x) {})
+```
+
+#### Looping Pattern 2: Over numeric indices
+Looping over the numeric indices in a list
+```{r loop_numeric_indices, eval = FALSE}
+lapply(seq_along(xs), function(x) {})
+```
+
+#### Looping Pattern 3: Over the names
+Looping over the names in a list
+```{r loop_names, eval = FALSE}
+lapply(names(xs), function(nm) {})
+```
+
+### sapply & vapply
+Functionals that take a function, apply it to every element in a list, and return an atomic vector.
+
+* `sapply()` guesses while `vapply()` takes an additional argument for the output type
+* `vapply()` is better suited for use inside functions.
+
+```{r vector_output}
+df <- data.frame(x = 1:10, y = Sys.time() + 1:10)
+sapply(df, class)
+# vapply(df, class, character(2))
+```
+
+### mapply & Map
+Used when you have two or more lists (or data frames) that you need to process in parallel.
+```{r Map_example}
+# Generate some sample data
+xs <- replicate(n = 5, expr = runif(10), simplify = FALSE)
+ws <- replicate(n = 5, expr = rpois(10, 5) + 1, simplify = FALSE)
+
+Map(function(xs, ws) {weighted.mean(xs, ws)}, xs, ws)
+```
+
+#### Parallelisation (mclapply + mcMap)
+Since we can compute each element in any order, it's easy to dispatch tasks to different cores, and compute them in parallel using the **parallel** package.
+```{r parralelisation}
+library(parallel)
+system.time(mclapply(1:1000, sqrt, mc.cores = 4))
+system.time(lapply(1:1000, sqrt))
+```
+
+### apply, tapply, sweep, outer
+
+
+
+
 
